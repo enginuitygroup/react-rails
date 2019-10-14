@@ -53,13 +53,17 @@ module React
         end
       end
 
+      class << self
+        attr_accessor :webpacker_instance
+      end
+
       if MAJOR < 3
         def manifest
           Webpacker::Manifest
         end
       else
         def manifest
-          Webpacker.manifest
+          webpacker_instance.manifest
         end
       end
 
@@ -69,7 +73,15 @@ module React
         end
       else
         def config
-          Webpacker.config
+          webpacker_instance.config
+        end
+      end
+
+      def webpacker_instance
+        if self.class.webpacker_instance.present?
+          self.class.webpacker_instance
+        else
+          Webpacker
         end
       end
 
