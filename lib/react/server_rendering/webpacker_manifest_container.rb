@@ -39,7 +39,7 @@ module React
         end
       else
         def find_asset(logical_path)
-          asset_path = Webpacker.manifest.lookup(logical_path).to_s
+          asset_path = manifest.lookup(logical_path).to_s
           if Webpacker.dev_server.running?
             ds = Webpacker.dev_server
             # Remove the protocol and host from the asset path. Sometimes webpacker includes this, sometimes it does not
