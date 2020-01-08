@@ -40,8 +40,8 @@ module React
       else
         def find_asset(logical_path)
           asset_path = manifest.lookup(logical_path).to_s
-          if Webpacker.dev_server.running?
-            ds = Webpacker.dev_server
+          if webpacker_instance.dev_server.running?
+            ds = webpacker_instance.dev_server
             # Remove the protocol and host from the asset path. Sometimes webpacker includes this, sometimes it does not
             asset_path.slice!("#{ds.protocol}://#{ds.host_with_port}")
             dev_server_asset = open("#{ds.protocol}://#{ds.host_with_port}#{asset_path}").read
