@@ -39,9 +39,9 @@ module React
         end
       else
         def find_asset(logical_path)
-          asset_path = Webpacker.manifest.lookup(logical_path).to_s
-          if Webpacker.dev_server.running?
-            ds = Webpacker.dev_server
+          asset_path = manifest.lookup(logical_path).to_s
+          if webpacker_instance.dev_server.running?
+            ds = webpacker_instance.dev_server
             # Remove the protocol and host from the asset path. Sometimes webpacker includes this, sometimes it does not
             asset_path.slice!("#{ds.protocol}://#{ds.host_with_port}")
             dev_server_asset = open("#{ds.protocol}://#{ds.host_with_port}#{asset_path}").read
@@ -53,13 +53,17 @@ module React
         end
       end
 
+      class << self
+        attr_accessor :webpacker_instance
+      end
+
       if MAJOR < 3
         def manifest
           Webpacker::Manifest
         end
       else
         def manifest
-          Webpacker.manifest
+          webpacker_instance.manifest
         end
       end
 
@@ -69,7 +73,15 @@ module React
         end
       else
         def config
-          Webpacker.config
+          webpacker_instance.config
+        end
+      end
+
+      def webpacker_instance
+        if self.class.webpacker_instance.present?
+          self.class.webpacker_instance
+        else
+          Webpacker
         end
       end
 
